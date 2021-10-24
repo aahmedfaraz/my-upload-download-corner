@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Download PDF | Ahmed Faraz</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            width: 100vw;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background-color: whitesmoke;
+            font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+        }
+
+        header h1 {
+            color: tomato;
+            padding: 20px 10px;
+        }
+
+        main {
+            width: 600px;
+            max-width: 100%;
+            background-color: white;
+            box-shadow: 0 0 5px rgb(231, 231, 231);
+            border-radius: 10px;
+            padding: 50px 30px;
+        }
+
+        main button {
+            cursor: pointer;
+            width: 100%;
+            border: 0;
+            background-color: tomato;
+            color: white;
+            padding: 10px;
+            border-radius: 5px;
+            margin-bottom: 10px;
+            border-bottom: 2px solid rgb(175, 68, 49);
+        }
+
+        main button:active {
+            transform: scale(0.95);
+        }
+
+        form {
+            width: 100%;
+            display: flex;
+        }
+
+        form input {
+            width: 100%;
+            border: 1px solid gray;
+            padding: 10px;
+            border-radius: 5px;
+        }
+
+        form input[type=submit] {
+            cursor: pointer;
+            width: 300px;
+            border: 0;
+            background-color: tomato;
+            color: white;
+            padding: 10px;
+            border-radius: 5px;
+            margin-left: 10px;
+            border-bottom: 2px solid rgb(175, 68, 49);
+        }
+
+        form input[type=submit]:active {
+            transform: scale(0.95);
+        }
+
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Download PDF using FileSaver.js JavaScript</h1>
+    </header>
+    <main>
+        <button id="sample-pdf">Download Sample PDF File</button>
+        <form id="form">
+            <input type="text" id="url" placeholder="Enter URL Link for PDF to Download">
+            <input type="submit" value="← Download Mentioned PDF">
+        </form>
+    </main>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.0/FileSaver.min.js" integrity="sha512-csNcFYJniKjJxRWRV1R7fvnXrycHP6qDR21mgz1ZP55xY5d+aHLfo9/FcGDQLfn2IfngbAHd8LdfsagcCqgTcQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script>
+        // For Top Button
+        const sampleButton = document.getElementById('sample-pdf');
+        sampleButton.addEventListener('click', () => {
+            const xhr = new XMLHttpRequest();
+            const url = './assets/sample.pdf';
+            xhr.open('GET', url, true);
+            xhr.responseType = 'blob';
+            xhr.onload = () => {
+                const file = new Blob([xhr.response],{
+                    type: 'application/pdf'
+                })
+                saveAs(file, 'sampleFile.pdf');
+            }
+            xhr.send();
+        })
+
+        // For Form Button
+        const form = document.getElementById('form');
+        form.addEventListener('submit', e => {
+            e.preventDefault();
+            const url = document.getElementById('url').value;
+            if(url.trim() !== ''){
+                try {
+                    const xhr = new XMLHttpRequest();
+                    xhr.open('GET', url, true);
+                    xhr.responseType = 'blob';
+                    xhr.setRequestHeader('Access-Control-Allow-Origin', '*')
+                    xhr.onload = () => {
+                        const file = new Blob([xhr.response], {
+                            type: 'application/pdf'
+                        })
+                        saveAs(file, 'yourFile.pdf')
+                    }
+                    xhr.send();
+                } catch (error) {
+                    alert('Enter a valid URL');
+                }
+            } else {
+                alert('Enter URL of PDF to Download');
+            }
+        })
+    </script>
+</body>
+</html>
